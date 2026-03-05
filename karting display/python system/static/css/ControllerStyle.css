@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #f6f5f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Monserrat', sans-serif;
+    height: 100vh;
+    margin: -20px 0 50px;
+}
+
+h1 {
+    font-weight: bold;
+    margin: 0;
+}
+
+h2 {
+    text-align: center;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 100px;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+	margin: 20px 0 30px;
+}
+
+span {
+	font-size: 12px;
+}
+
+a {
+	color: #333;
+	font-size: 14px;
+	text-decoration: none;
+	margin: 15px 0;
+}
+
+button {
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+.green {
+	border: 1px solid lightgreen;
+	background-color: lightgreen;
+	color: #FFFFFF;
+}
+
+.yellow {
+    border: 1px solid yellow;
+	background-color: yellow;
+	color: #000000;
+}
+
+.red {
+    border: 1px solid red;
+	background-color: red;
+	color: #FFFFFF;
+}
+
+.blue {
+    border: 1px solid lightskyblue;
+	background-color: lightskyblue;
+	color: #FFFFFF;
+}
+
+.PB {
+    border: 1px solid goldenrod;
+	background-color: goldenrod;
+	color: #FFFFFF;
+}
+
+.Pitstop {
+    border: 1px solid #c115d4;
+	background-color: #c115d4;
+	color: #FFFFFF;   
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+button:focus {
+	outline: none;
+}
+
+button.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
+
+
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			0 10px 10px rgba(0,0,0,0.22);
+	position: relative;
+	overflow: hidden;
+	width: 768px;
+	max-width: 100%;
+	min-height: 480px;
+}
+
+.left-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			0 10px 10px rgba(0,0,0,0.22);
+	position: relative;
+	overflow: hidden;
+	width: 768px;
+	max-width: 100%;
+	min-height: 480px;
+}
+
+.right-button-container {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+
+}
+
+select {
+	width: 200px;
+	padding: 12px 15px;
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	background-color: #eee;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
+	color: #333;
+	appearance: none;
+	cursor: pointer;
+	transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+select:focus {
+	outline: none;
+	border: 1px solid #FF4B2B;
+	background-color: #fff;
+}
