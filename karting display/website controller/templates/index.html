@@ -20,6 +20,7 @@
                             <button id="profile">Profile</button>
                             <button id="home">Home</button>
                             <button id="tracks">Tracks</button>
+                            <button id="bug-report">Report Bug</button>
 
                             <div class="spacer"></div>
 
@@ -119,6 +120,18 @@
                 </div>
 
             </div>
+        </div>
+
+        <!-- Bug Report Modal -->
+        <div id="bug-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-bug-modal" class="close">&times;</span>
+            <h3>Report a Bug</h3>
+            <input type="text" id="bug-title" placeholder="Bug Title" />
+            <textarea id="bug-description" placeholder="Describe the bug"></textarea>
+            <button id="submit-bug">Submit Bug</button>
+            <p id="bug-status"></p>
+        </div>
         </div>
     </body>
 </html>

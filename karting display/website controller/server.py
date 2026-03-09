@@ -1,6 +1,8 @@
 import sys
+import os
 import threading
 from datetime import datetime
+import requests
 
 import socket
 import socketio
@@ -344,6 +346,14 @@ class MainWindow(QMainWindow):
 sio = socketio.Server(cors_allowed_origins="*")
 app = socketio.WSGIApp(sio)
 
+github_token = os.getenv("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")
+repo = "SlothzDoCode/karting-display"
+
+headers = {
+    "Authorization": f"Bearer {github_token}",
+    "Accept": "application/vnd.github+json"
+}
+
 
 def add_tracks(): 
     conn = psycopg2.connect( dbname='KDisplay database', user='sql test', password='admin', host='192.168.1.68', port=5432) 
@@ -375,6 +385,39 @@ def get_track_map(location):
 def connect(sid, environ):
     print("Client connected:", sid)
     sio.emit("Track-setup",get_track_info())
+
+@sio.event
+def bug_report(sid, data):
+    title = data["title"]
+    description = data["description"]
+    ua = data.get("user_agent", "unknown")
+    
+    body = f"""
+    ### Bug Report
+    
+    {description}
+    
+    ### User Agent
+    
+    {ua}
+    """
+    
+    issue_data = {
+        "title":title,
+        "body":body,
+        "labels": ["bug"]
+    }
+    
+    r = requests.post(
+        f"https://api.github.com/repos/{REPO}/issues",
+        json=issue_data,
+        headers=headers
+    )
+    
+    if r.status_code == 201:
+        sio.emit("bug_report_status", {"status": "ok"}, to=sid)
+    else:
+        sio.emit("bug_report_status", {"status": "error"}, to=sid)
 
 
 @sio.event

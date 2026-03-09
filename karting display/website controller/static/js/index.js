@@ -108,3 +108,71 @@ homeBtn.addEventListener('click', () => {
 logoutBtn.addEventListener('click', () => {
     window.location.href = "/templates/login.html";
 });
+
+
+// ===================== Bug Report Modal ===================== //
+const bugModal = document.getElementById("bug-modal");
+const openBugBtn = document.getElementById("bug-report"); // Sidebar button
+const closeBugBtn = document.getElementById("close-bug-modal");
+
+const bugTitleInput = document.getElementById("bug-title");
+const bugDescriptionInput = document.getElementById("bug-description");
+const submitBugBtn = document.getElementById("submit-bug");
+const bugStatus = document.getElementById("bug-status");
+
+// Open modal
+openBugBtn.addEventListener("click", () => {
+    bugModal.style.display = "flex";
+    bugStatus.textContent = "";
+    bugTitleInput.value = "";
+    bugDescriptionInput.value = "";
+});
+
+// Close modal
+closeBugBtn.addEventListener("click", () => {
+    bugModal.style.display = "none";
+});
+
+// Close modal if clicking outside content
+window.addEventListener("click", (e) => {
+    if (e.target === bugModal) {
+        bugModal.style.display = "none";
+    }
+});
+
+// Submit bug report
+submitBugBtn.addEventListener("click", () => {
+    const title = bugTitleInput.value.trim();
+    const description = bugDescriptionInput.value.trim();
+
+    if (!title || !description) {
+        bugStatus.textContent = "Please fill in both title and description.";
+        bugStatus.style.color = "red";
+        return;
+    }
+
+    const payload = {
+        title,
+        description,
+        user_agent: navigator.userAgent,
+        url: window.location.href
+    };
+
+    socket.emit("bug_report", payload);
+    bugStatus.textContent = "Sending...";
+    bugStatus.style.color = "black";
+});
+
+// Receive confirmation from server
+socket.on("bug_report_status", (data) => {
+    if (data.status === "ok") {
+        bugStatus.textContent = "Bug report submitted! Thank you.";
+        bugStatus.style.color = "green";
+        bugTitleInput.value = "";
+        bugDescriptionInput.value = "";
+        setTimeout(() => { bugModal.style.display = "none"; }, 2000); // auto-close after 2s
+    } else {
+        bugStatus.textContent = "Failed to submit bug report.";
+        bugStatus.style.color = "red";
+    }
+});
