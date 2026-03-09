@@ -346,7 +346,7 @@ class MainWindow(QMainWindow):
 sio = socketio.Server(cors_allowed_origins="*")
 app = socketio.WSGIApp(sio)
 
-github_token = os.getenv("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")
+github_token = os.getenv("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")
 repo = "SlothzDoCode/karting-display"
 
 headers = {
