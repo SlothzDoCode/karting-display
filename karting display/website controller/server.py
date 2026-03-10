@@ -344,9 +344,15 @@ class MainWindow(QMainWindow):
 # ==========================================================
 
 sio = socketio.Server(cors_allowed_origins="*")
-app = socketio.WSGIApp(sio)
+app = socketio.WSGIApp(
+    sio,
+    static_files={
+        '/': os.path.join(os.getcwd(), 'templates', 'index.html'),
+        '/static': os.path.join(os.getcwd(), 'static')
+    }
+)
 
-github_token = os.getenv("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")
+github_token = os.getenv("GITHUB_TOKEN")
 repo = "SlothzDoCode/karting-display"
 
 headers = {
@@ -356,14 +362,14 @@ headers = {
 
 
 def add_tracks(): 
-    conn = psycopg2.connect( dbname='KDisplay database', user='sql test', password='admin', host='192.168.1.68', port=5432) 
+    conn = psycopg2.connect( dbname='KDisplay database', user='sql test', password='admin', host='127.0.0.1', port=5432) 
     cur = conn.cursor() 
     script = "INSERT INTO track_info (track_name, start_long, start_lat, track_map_location) VALUES ('Teamsport Leicester', 52.6634236214469, -1.0852487112926859, 'https://images.prismic.io/teamsport/aCsFJSdWJ-7kSSSj_Teamsport_Trackmap_LEICESTER_1440px.png?auto=format,compress')" 
     cur.execute(script) 
     conn.commit() 
 
 def get_track_info(): 
-    conn = psycopg2.connect( dbname='KDisplay database', user='sql test', password='admin', host='192.168.1.68', port=5432) 
+    conn = psycopg2.connect( dbname='KDisplay database', user='sql test', password='admin', host='127.0.0.1', port=5432) 
     cur = conn.cursor() 
     script = "SELECT track_name FROM track_info" 
     cur.execute(script) 
@@ -371,7 +377,7 @@ def get_track_info():
     return rows 
 
 def get_track_map(location): 
-    conn = psycopg2.connect( dbname='KDisplay database', user='sql test', password='admin', host='192.168.1.68', port=5432) 
+    conn = psycopg2.connect( dbname='KDisplay database', user='sql test', password='admin', host='127.0.0.1', port=5432) 
     print(location)
     cur = conn.cursor() 
     script = "SELECT track_map_location FROM track_info WHERE track_name=%s" 
@@ -388,6 +394,7 @@ def connect(sid, environ):
 
 @sio.event
 def bug_report(sid, data):
+    print("Token:", github_token)
     title = data["title"]
     description = data["description"]
     ua = data.get("user_agent", "unknown")
@@ -409,7 +416,7 @@ def bug_report(sid, data):
     }
     
     r = requests.post(
-        f"https://api.github.com/repos/{REPO}/issues",
+        f"https://api.github.com/repos/{repo}/issues",
         json=issue_data,
         headers=headers
     )
