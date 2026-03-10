@@ -1,5 +1,5 @@
 //other constants
-const socket = io("http://192.168.1.76:5000");
+const socket = io("http://172.24.36.89:5000");
 const trackSelect = document.getElementById("location");
 const mapDiv = document.querySelector(".map");
 
