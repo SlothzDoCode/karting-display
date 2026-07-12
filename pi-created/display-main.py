@@ -147,16 +147,23 @@ class sprintMode(QWidget): #? shows flag state, time left in session, position
 			self.timer.start(1000)
 		
 		def updateTimer(self):
-			mins = self.reSec // 60
-			secs = self.reSec % 60
-			self.timerTxt.setText(f"{mins:02}:{secs:02}")
-			self.timerTxt.adjustSize()
+			if self.reSec > 3600:
+				hour = self.reSec // 3600
+				mins = (self.reSec % 3600) // 60
+				secs = self.reSec % 60
+				self.timerTxt.setText(f"{hour:02}:{mins:02}:{secs:02}")
+				self.timerTxt.adjustSize()
+			else:
+				mins = self.reSec // 60
+				secs = self.reSec % 60
+				self.timerTxt.setText(f"{mins:02}:{secs:02}")
+				self.timerTxt.adjustSize()
 			
 			if self.reSec > 0:
 				self.reSec -= 1
 			else:
 				self.timer.stop()
-				
+
 		def posEnd(self, pos):
 			if 10 <= pos % 100 <=20:
 				return "th"
