@@ -31,7 +31,7 @@ class stateManager:
 		return cls._instance
 
 class Communicate(QObject):
-	update_label = pyqtSignal(str)
+	update_label = pyqtSignal(object)
 	
 class MainWindow(QMainWindow): #? main menu window
 	def __init__(self):
@@ -594,14 +594,15 @@ class enduroMode(QWidget):
 		self.table = QTableWidget(len(driverNames)-1,2)
 		self.table.setHorizontalHeaderLabels(["Name", "Stint Time"])
 			
-		for i in range(len(driver)-1):
+		for i in range(len(driverNames)-1):
 			self.table.setItem(i,0, QTableWidgetItem(driverNames[i]))
 			self.table.setItem(i,1, QTableWidgetItem(stintLength))
 		
-		self.startTimer(int(data[5:]) * 60)
+		self.startTimer(self.session_time)
 	
-	@pyqtSlot(str)
+	@pyqtSlot(object)
 	def handle_flag_input(self, data):
+		print(f"!!!{data}!!!")
 		if data == "Green Flag":
 			self.flash_timer.stop()
 			self.state.current_bg = "#009639"
@@ -634,7 +635,7 @@ class enduroMode(QWidget):
 			self.positionTxt.setText(data[3:] + self.posEnd(int(data[3:].strip())))
 			self.positionTxt.adjustSize()
 		
-		elif type(data) is object:
+		elif isinstance(data, dict):
 			self.createTable(data, self.session_time)
 				
 #--------------- flask+socketio ----------------#
@@ -644,23 +645,25 @@ socketio = SocketIO(flask_app, cors_allowed_origins="*", manage_session=True, as
 
 @socketio.on('flag_status')
 def handle_flag(data):
-	print(f"Recived: {data}")
+	print(f"Recived: {data} \n data type: {type(data)}")
 	global active
 	
 	if active:
-		if type(data) is str:
+		if isinstance(data, str):
+			print(1)
 			QMetaObject.invokeMethod(
 				active,
 				"handle_flag_input",
 				Qt.ConnectionType.QueuedConnection,
-				Q_ARG(str,data)
+				Q_ARG(object,data)
 			)
-		elif type(data) is object:
+		elif isinstance(data, dict):
+			print(2)
 			QMetaObject.invokeMethod(
 				active,
 				"handle_flag_input",
-				Qt.connectionType.QueuedConnection,
-				Q_ARG(object, data)
+				Qt.ConnectionType.QueuedConnection,
+				Q_ARG(object,data)
 			)
 		
 #------------------- Run Flask -----------------#
